@@ -8,12 +8,14 @@ Calculates semester GPA and cumulative CGPA instantly.
 Editable rows for adding/removing courses.
 Responsive layout for desktop and mobile.
 All calculations done locally in the browser for privacy and speed.
+
 How to use
 
 Open index.html in any modern browser.
 Add courses, select or type grades, and enter credit hours.
 The app will show semester GPA and update cumulative CGPA automatically.
 Optionally copy or screenshot results for your records.
+
 Tech stack
 
 HTML5, CSS3, and vanilla JavaScript — zero dependencies.
