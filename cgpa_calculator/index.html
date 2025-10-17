@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CGPA Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>CGPA / GPA Calculator</h1>
+      <div class="muted">Weighted average of grade points</div>
+    </header>
+
+    <div class="card">
+      <div class="controls">
+            <button id="addSemester">+ Add semester</button>
+            <button id="clearAll" class="btn-secondary">Clear all</button>
+            <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
+            </div>
+          </div>
+
+          <div id="semesters">
+            <!-- semester blocks inserted here -->
+          </div>
+
+      <div class="result">
+            <div>
+              <div class="small">Total credits</div>
+              <div id="totalCredits" class="big">0</div>
+            </div>
+            <div>
+              <div class="small">Overall CGPA / GPA</div>
+              <div id="cgpa" class="big">0.00</div>
+            </div>
+            <div style="margin-left:auto" class="actions">
+              <button id="calcAll">Calculate all</button>
+              <button id="save" class="btn-secondary">Save</button>
+              <button id="print" class="btn-secondary">Print</button>
+            </div>
+          </div>
+
+      <div class="note">Notes: Enter credit hours and grade-point for each subject. CGPA = (sum(credit * grade))/sum(credits). Use the "scale" selector to remind yourself which GPA scale you're using.</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
