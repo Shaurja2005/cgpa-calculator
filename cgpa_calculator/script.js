@@ -7,7 +7,6 @@ const totalCreditsEl = document.getElementById('totalCredits');
 const cgpaEl = document.getElementById('cgpa');
 const saveBtn = document.getElementById('save');
 const printBtn = document.getElementById('print');
-// Persistence removed: application will not persist data across refreshes.
 
 const defaultMapping = [
   {min:85, max:100, gp:10, label:'S'},
@@ -18,8 +17,6 @@ const defaultMapping = [
   {min:45, max:49, gp:5, label:'E'},
   {min:0, max:44, gp:0, label:'F'}
 ];
-
-// Only load mapping from storage when persistence is enabled; otherwise use defaults
 let mapping = defaultMapping.slice();
 
 function normalizeMapping(){
@@ -34,7 +31,7 @@ function normalizeMapping(){
 }
 normalizeMapping();
 
-function saveMapping(){ /* persistence removed: no-op */ }
+function saveMapping(){ }
 
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, function(c){
@@ -90,7 +87,6 @@ function createSubRow(tbody, subject='', credits='', grade=''){
   const selGrade=tr.querySelector('.gradeSel');
   function populateSelectOptions(){ selGrade.innerHTML=''; const standard=['S','A','B','C','D','E','F']; const empty=document.createElement('option'); empty.value=''; empty.textContent='Select'; selGrade.appendChild(empty); standard.forEach(l=>{ const gp=gpForLabelDisplay(l); const o=document.createElement('option'); o.value=l; o.textContent=`${l} (${gp})`; selGrade.appendChild(o); }); selGrade.style.display='inline-block'; }
   populateSelectOptions();
-  // debug: log available options for this select
   try{ console.log('populateSelectOptions ->', Array.from(selGrade.options).map(o=>o.value + ':' + o.textContent)); }catch(e){}
   if(grade){ inpGrade.value=String(grade).toUpperCase(); const opt=Array.from(selGrade.options).find(o=>o.value && o.value.toUpperCase()===String(grade).toUpperCase()); if(opt) opt.selected=true; }
   updateRowPoints(tr); updateSemester(tbody);
@@ -100,7 +96,6 @@ function createSubRow(tbody, subject='', credits='', grade=''){
     updateRowPoints(tr);
     updateSemester(tbody);
   });
-  // also listen for 'input' events on select (some browsers/platforms) to be extra robust
   selGrade.addEventListener('input', ()=>{
     console.log('grade select input ->', selGrade.value);
     if(selGrade.value) inpGrade.value = selGrade.value;
@@ -128,7 +123,7 @@ function createSubRow(tbody, subject='', credits='', grade=''){
     updateSemester(tbody);
     calcAll();
   });
-  // also react to change events on text input (some browsers trigger change on blur)
+  
   inpGrade.addEventListener('change', ()=>{ console.log('grade input change ->', inpGrade.value); updateRowPoints(tr); updateSemester(tbody); calcAll(); });
   inpCred.addEventListener('input', ()=>{ updateRowPoints(tr); updateSemester(tbody); calcAll(); });
   tr.querySelector('.rm').addEventListener('click', ()=>{ tr.remove(); renumber(tbody); updateSemester(tbody); calcAll(); });
@@ -157,8 +152,8 @@ function updateSemester(tbody){ const rows=Array.from(tbody.querySelectorAll('tr
 function refreshAllGradeSelects(){ const sels=Array.from(document.querySelectorAll('.gradeSel')); sels.forEach(sel=>{ const tr=sel.closest('tr'); const tbody=tr.closest('tbody'); sel.innerHTML=''; const empty=document.createElement('option'); empty.value=''; empty.textContent='Select'; sel.appendChild(empty); ['S','A','B','C','D','E','F'].forEach(l=>{ const gp=gpForLabelDisplay(l); const o=document.createElement('option'); o.value=l; o.textContent=`${l} (${gp})`; sel.appendChild(o); }); sel.style.display='inline-block'; }); }
 function calcAll(){ const semCards=Array.from(semestersEl.querySelectorAll('.card')); console.log('calcAll starting for', semCards.length, 'semesters'); let totalCred=0, totalPoints=0; semCards.forEach(card=>{ const tbody=card.querySelector('tbody'); const rowsCount=tbody.querySelectorAll('tr').length; console.log(' processing semester', card.querySelector('strong')?card.querySelector('strong').textContent:'(unnamed)', 'rows=', rowsCount); Array.from(tbody.querySelectorAll('tr')).forEach(r=>updateRowPoints(r)); updateSemester(tbody); const sc=parseFloat(card.querySelector('.semCredits').textContent)||0; const sg=parseFloat(card.querySelector('.semGpa').textContent)||0; totalCred+=sc; totalPoints+=sc*sg; }); totalCreditsEl.textContent=totalCred.toFixed(2).replace(/\.00$/,''); const overall=totalCred>0?(totalPoints/totalCred):0; cgpaEl.textContent=overall.toFixed(2); return {totalCred, overall}; }
 function clearAll(){ semestersEl.innerHTML=''; totalCreditsEl.textContent='0'; cgpaEl.textContent='0.00'; }
-function save(){ /* persistence removed: no-op */ }
-function load(){ /* persistence removed: no-op */ }
+function save(){ }
+function load(){ }
 // clear stored data and reset the UI to defaults (no persistent storage present)
 function resetSaved(){ mapping = defaultMapping.slice(); normalizeMapping(); clearAll(); createSemester('Semester 1'); refreshAllGradeSelects(); calcAll(); }
 let _lastCalcAt=0; if(calcAllBtn){ function runCalc(evt){ try{ const now=Date.now(); if(now-_lastCalcAt<400) return; _lastCalcAt=now; console.log('Calculate triggered', evt&&evt.type); cgpaEl.textContent='Calculating...'; setTimeout(()=>{ calcAll(); }, 10); }catch(e){ console.error(e); alert('Calculation error: '+(e&&e.message?e.message:e)); } } calcAllBtn.addEventListener('click', runCalc); calcAllBtn.addEventListener('pointerdown', runCalc); calcAllBtn.onclick=runCalc; }else{ console.warn('Calculate button not found'); }
@@ -171,7 +166,7 @@ if(addSemesterBtn){
   function runAddSemester(evt){
     try{
       console.log('Add semester triggered', evt && evt.type);
-      // determine next semester number (increment from existing highest)
+      // determine next semester number
       function getNextSemesterNumber(){
         const cards = Array.from(semestersEl.querySelectorAll('.card'));
         let max = 0;
@@ -205,3 +200,4 @@ if(clearAllBtn){
 // Seed a single default semester on startup
 createSemester('Semester 1');
 refreshAllGradeSelects(); calcAll();
+
