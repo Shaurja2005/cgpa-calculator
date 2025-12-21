@@ -1,7 +1,5 @@
 import { CGPACalculator } from "@/components/CGPACalculator";
 
-const Index = () => {
+export default function Calculator() {
   return <CGPACalculator />;
-};
-
-export default Index;
+}
