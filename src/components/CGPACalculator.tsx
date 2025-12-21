@@ -1,8 +1,9 @@
 import { useState, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Semester } from "@/types/cgpa";
 import { SemesterCard } from "./SemesterCard";
 import { Button } from "@/components/ui/button";
-import { Plus, RotateCcw, Download, GraduationCap } from "lucide-react";
+import { Plus, RotateCcw, Download, GraduationCap, Home } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 function generateId() {
@@ -91,9 +92,9 @@ export function CGPACalculator() {
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-primary/10">
+              <Link to="/" className="p-2 rounded-xl bg-primary/10 hover-scale hover-glow transition-all">
                 <GraduationCap className="h-6 w-6 text-primary" />
-              </div>
+              </Link>
               <div>
                 <h1 className="text-xl font-bold">CGPA Calculator</h1>
                 <p className="text-sm text-muted-foreground">Track your academic performance</p>
@@ -101,11 +102,17 @@ export function CGPACalculator() {
             </div>
             
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={clearAll}>
+              <Link to="/">
+                <Button variant="ghost" size="sm" className="hover-lift">
+                  <Home className="h-4 w-4 mr-2" />
+                  Home
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm" onClick={clearAll} className="hover-lift">
                 <RotateCcw className="h-4 w-4 mr-2" />
                 Reset
               </Button>
-              <Button variant="outline" size="sm" onClick={exportData}>
+              <Button variant="outline" size="sm" onClick={exportData} className="hover-lift">
                 <Download className="h-4 w-4 mr-2" />
                 Export
               </Button>
@@ -118,7 +125,7 @@ export function CGPACalculator() {
       <main className="max-w-4xl mx-auto px-6 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="card-elegant rounded-xl p-6 border border-border/50">
+          <div className="card-elegant rounded-xl p-6 border border-border/50 hover-glow cursor-default">
             <div className="text-sm text-muted-foreground uppercase tracking-wide mb-1">
               Overall CGPA
             </div>
@@ -131,7 +138,7 @@ export function CGPACalculator() {
             </div>
           </div>
           
-          <div className="card-elegant rounded-xl p-6 border border-border/50">
+          <div className="card-elegant rounded-xl p-6 border border-border/50 hover-glow cursor-default">
             <div className="text-sm text-muted-foreground uppercase tracking-wide mb-1">
               Total Credits
             </div>
@@ -157,7 +164,7 @@ export function CGPACalculator() {
         {/* Add Semester Button */}
         <Button
           onClick={addSemester}
-          className="w-full mt-6 py-6 text-base font-medium"
+          className="w-full mt-6 py-6 text-base font-medium btn-hover"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add Semester
